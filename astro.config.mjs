@@ -12,6 +12,11 @@ export default defineConfig({
   site: 'https://turnaphrase.app',
   output: 'static',
   build: {
+    // Emit /privacy.html instead of /privacy/index.html so Cloudflare
+    // serves /privacy with 200 directly — no 308 trailing-slash redirect
+    // (which crawlers + the App Store privacy-URL check don't follow
+    // gracefully).
+    format: 'file',
     // Inline CSS smaller than 4KB; ours is tiny so this prevents any
     // CSS file FOUC.
     inlineStylesheets: 'always',
