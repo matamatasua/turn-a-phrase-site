@@ -47,59 +47,38 @@ npm run preview
 
 ## Deploy
 
-### Auto (via GitHub Actions — recommended)
-
-Every push to `main` deploys to production. Every PR deploys to a unique
-preview URL that Cloudflare comments on the PR.
-
-For the GitHub Actions workflow to work, two repository secrets must be set
-**once** under Settings → Secrets and variables → Actions:
-
-- **`CLOUDFLARE_API_TOKEN`** — create at Cloudflare Dashboard → My Profile →
-  API Tokens → Create Token → use the "Edit Cloudflare Workers" template
-  (it includes Pages permissions). Copy the token; paste here.
-- **`CLOUDFLARE_ACCOUNT_ID`** — found at Cloudflare Dashboard → Workers &
-  Pages → right sidebar.
-
-After adding both secrets, the next push to `main` will deploy.
-
-### Manual (from your terminal)
+This project uses **manual wrangler deploys**, not Cloudflare's Git
+integration or GitHub Actions. Rationale: tiny content site, deploys are
+infrequent, fewer moving parts to debug.
 
 ```bash
 npm install
-npx wrangler login           # one-time, opens browser
+npx wrangler login           # one-time per machine, opens browser
 npm run deploy               # builds + deploys via wrangler
 ```
 
----
+`npm run deploy` is just `astro build && wrangler pages deploy dist
+--project-name=turn-a-phrase`. See `package.json` if you want to tweak.
 
-## Cloudflare Pages project setup (one-time)
-
-The Pages project itself must exist before the first deploy. Two options:
-
-**Option A — via wrangler (no Git integration):**
-```bash
-npx wrangler login
-npx wrangler pages project create turn-a-phrase --production-branch main
-```
-
-**Option B — via Dashboard:**
-Workers & Pages → Create → Pages → "Direct Upload" (since we deploy via
-Actions / wrangler, not via Cloudflare's native Git integration). Name the
-project `turn-a-phrase`. Production branch: `main`.
-
-After the project exists, the first deploy publishes it.
+Switching to auto-deploys later: either
+- enable Cloudflare's native Git integration (Dashboard → `turn-a-phrase`
+  → Settings → Builds & deployments → Git integration → Connect GitHub),
+  or
+- restore a `.github/workflows/deploy.yml` using the `wrangler-action`
+  GitHub Action and two repo secrets (`CLOUDFLARE_API_TOKEN`,
+  `CLOUDFLARE_ACCOUNT_ID`). An earlier version of this README documented
+  that path — check `git log` for the recipe if you want it back.
 
 ---
 
-## Custom domain
+## Custom domain — already configured
 
-Once a deploy is live (Cloudflare gives you a `*.pages.dev` URL):
+`turnaphrase.app` is bound to the `turn-a-phrase` Cloudflare Pages
+project. If you ever need to re-attach (project deleted, etc.):
 
 1. Dashboard → Workers & Pages → `turn-a-phrase` → Custom domains → Set up a
    custom domain → `turnaphrase.app`.
-2. Cloudflare auto-configures the DNS record (you own the domain here, so
-   no manual A/CNAME needed).
+2. Cloudflare auto-configures DNS in the existing zone.
 3. SSL cert provisions automatically in ~1 minute.
 
 ---
