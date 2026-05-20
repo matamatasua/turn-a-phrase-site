@@ -1,0 +1,91 @@
+---
+/**
+ * BaseLayout — wraps every page with the parchment-themed shell.
+ *
+ * Pulls Playfair Display + Crimson Pro from Google Fonts via preconnect
+ * so first paint isn't blocked. The font-display: swap on the Google
+ * font URL ensures the system serif (Georgia) renders immediately and
+ * is replaced once Playfair/Crimson land — matches the same fallback
+ * behavior the native app uses with Georgia until @expo-google-fonts
+ * loads.
+ */
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  /** Override og:image; defaults to the parchment social card. */
+  image?: string;
+  /** Page slug for canonical URL, e.g. "privacy". Empty for landing. */
+  path?: string;
+}
+
+const {
+  title,
+  description = 'Learn English idioms — daily challenges, real origins, spaced repetition. The bookish way to sound fluent.',
+  image = '/og.png',
+  path = '',
+} = Astro.props;
+
+const canonical = `https://turnaphrase.app${path ? '/' + path : ''}`;
+const year = new Date().getFullYear();
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Theme color matches parchment so iOS Safari chrome blends -->
+    <meta name="theme-color" content="#FFF8E7" />
+
+    <!-- Open Graph / Twitter (tiny site, basics only) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`https://turnaphrase.app${image}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Favicons (svg + ico for legacy) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site">
+      <div class="container container--wide">
+        <a href="/" class="brand">Turn a Phrase</a>
+        <nav aria-label="Site">
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+          <a href="/support">Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site">
+      <div class="container container--wide">
+        <p>© {year} Mocklet Design. Made with ink and care.</p>
+        <p>
+          <a href="mailto:help@turnaphrase.app">help@turnaphrase.app</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

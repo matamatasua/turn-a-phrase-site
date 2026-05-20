@@ -1,0 +1,21 @@
+# Cloudflare Pages _headers — applied to served responses.
+#
+# Universal Links require apple-app-site-association to be served as
+# application/json (not text/plain or application/octet-stream) with NO
+# extension on the URL. Astro/CF Pages handle the no-extension routing
+# fine; this header pins the content-type.
+
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+  Cache-Control: public, max-age=300
+
+/.well-known/assetlinks.json
+  Content-Type: application/json
+  Cache-Control: public, max-age=300
+
+# Sensible default security headers for the rest of the site.
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

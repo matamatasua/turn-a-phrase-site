@@ -1,0 +1,21 @@
+{
+  "name": "turn-a-phrase-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Marketing site + privacy/terms for the Turn a Phrase app.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "deploy": "astro build && wrangler pages deploy dist --project-name=turn-a-phrase",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}

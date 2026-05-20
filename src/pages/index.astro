@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/**
+ * Landing. Intentionally short — App Store / Play Store do the heavy
+ * lifting of the actual conversion. This page exists so Apple sees a
+ * real homepage, our universal links resolve gracefully if the app
+ * isn't installed, and the privacy/terms have a parent.
+ *
+ * Store URLs are placeholders until the apps are live; the badges link
+ * to # for now and to the real URLs once you have the App Store IDs.
+ */
+
+const APP_STORE_URL = 'https://apps.apple.com/app/turn-a-phrase/idREPLACE';
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.mockletdesign.turnaphrase';
+---
+<BaseLayout title="Turn a Phrase — learn English idioms, beautifully">
+  <div class="container">
+    <span class="eyebrow">Turn a Phrase</span>
+    <h1>Speak English<br/>like you mean it.</h1>
+
+    <p class="lede">
+      Idioms are the hardest part of fluency — they aren't literal, they
+      aren't in dictionaries, and Duolingo barely touches them. We do.
+      One new idiom a day, with real origins, real usage, and the
+      register coach that tells you when <em>not</em> to use them.
+    </p>
+
+    <div class="store-row">
+      <a class="btn" href={APP_STORE_URL} aria-label="Download on the App Store">
+        Download on the App Store
+      </a>
+      <a class="btn btn--ghost" href={PLAY_STORE_URL} aria-label="Get it on Google Play">
+        Get it on Google Play
+      </a>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0">What's inside</h2>
+      <ul>
+        <li><strong>Daily challenge</strong> — one idiom a day, same one for everyone. Build a streak, share your result.</li>
+        <li><strong>1,500+ idiom dossiers</strong> — origin era, evolution timeline, real-world examples, fun facts.</li>
+        <li><strong>Register coach</strong> — when each phrase is appropriate, and when it'd sound dated or rude.</li>
+        <li><strong>Spaced repetition</strong> — SM-2 scheduling so phrases you struggle with come back at the right intervals.</li>
+        <li><strong>12 curated collections</strong> — Workplace, Shakespeare, Naval Origins, Sayings People Get Wrong.</li>
+        <li><strong>No ads. No tracking. No paywalls.</strong></li>
+      </ul>
+    </div>
+
+    <p style="text-align: center; color: var(--ink-muted); font-size: 0.95rem; margin-top: 56px;">
+      Built by a solo developer who learned three languages the hard way.<br/>
+      Questions, requests, bugs? <a href="mailto:help@turnaphrase.app">help@turnaphrase.app</a>
+    </p>
+  </div>
+</BaseLayout>

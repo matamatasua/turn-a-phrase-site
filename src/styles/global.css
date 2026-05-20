@@ -1,0 +1,230 @@
+/*
+ * Bright & Bookish — the same parchment/ink/serif language as the app.
+ * Tokens mirror theme/tokens.ts in the app repo. If the app palette
+ * ever changes, mirror it here so the site doesn't drift visually.
+ */
+
+:root {
+  /* Palette */
+  --page:       #FFF8E7;  /* parchment background */
+  --paper-edge: #F0E2BD;  /* borders, subtle dividers */
+  --cream:      #FAF1DD;  /* card / elevated surface */
+  --ink:        #1A0F00;  /* primary text */
+  --ink-soft:   #3A2614;  /* secondary text */
+  --ink-muted:  #7A6A52;  /* tertiary text, captions */
+  --wax:        #7A1F1F;  /* brand secondary, links */
+  --coral:      #E25C3F;  /* primary CTA, urgent text */
+  --coral-hi:   #FF7558;
+  --coral-dark: #B23E22;  /* hard 4px CTA shadow */
+  --gold:       #D9A21E;  /* accents */
+  --olive:      #6F8B4A;  /* success */
+
+  /* Type */
+  --serif-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --serif-body:    'Crimson Pro', Georgia, 'Times New Roman', serif;
+
+  /* Shape */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+}
+
+/* ---------- Reset + base ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 18px;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--serif-body);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+img, svg { max-width: 100%; height: auto; display: block; }
+
+/* ---------- Typography ---------- */
+
+h1, h2, h3 {
+  font-family: var(--serif-display);
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin: 0 0 0.6em;
+}
+
+h1 { font-size: clamp(2.4rem, 5vw, 3.4rem); }
+h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); margin-top: 2.2em; }
+h3 { font-size: 1.25rem; margin-top: 1.6em; }
+
+p, li {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+a {
+  color: var(--wax);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 120ms ease;
+}
+a:hover, a:focus { color: var(--coral); }
+
+/* ---------- Layout ---------- */
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.container--wide { max-width: 920px; }
+
+main { padding: 56px 0 80px; }
+
+header.site, footer.site {
+  background: var(--cream);
+  border-bottom: 1px solid var(--paper-edge);
+}
+footer.site { border-top: 1px solid var(--paper-edge); border-bottom: none; }
+
+header.site .container, footer.site .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+header.site .brand {
+  font-family: var(--serif-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+header.site nav { display: flex; gap: 20px; }
+header.site nav a {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+header.site nav a:hover { color: var(--coral); }
+
+footer.site { margin-top: 80px; }
+footer.site p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+/* ---------- Components ---------- */
+
+.eyebrow {
+  display: inline-block;
+  color: var(--coral);
+  font-family: var(--serif-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.lede {
+  font-size: 1.2rem;
+  color: var(--ink-soft);
+  line-height: 1.65;
+  margin-bottom: 1.4em;
+}
+
+.card {
+  background: var(--cream);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin: 28px 0;
+  box-shadow: 0 4px 14px rgba(26, 15, 0, 0.06);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--coral);
+  color: #fff;
+  font-family: var(--serif-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  border: 0;
+  box-shadow: 0 4px 0 var(--coral-dark);
+  transition: transform 80ms ease, box-shadow 80ms ease, background 120ms ease;
+  cursor: pointer;
+}
+.btn:hover { background: var(--coral-hi); color: #fff; }
+.btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--coral-dark);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--paper-edge);
+  box-shadow: none;
+}
+.btn--ghost:hover { background: var(--cream); color: var(--ink); }
+
+.store-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 30px 0 10px;
+}
+
+/* On legal pages, tighten the content. */
+.legal h2 { margin-top: 1.8em; }
+.legal p, .legal li { font-size: 1.02rem; }
+.legal ul, .legal ol { padding-left: 1.4em; }
+.legal li { margin-bottom: 0.4em; }
+.legal .last-updated {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  margin-top: -0.8em;
+  margin-bottom: 2.4em;
+  font-style: italic;
+}
+
+/* ---------- Focus ring for keyboard a11y ---------- */
+:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ---------- Print-friendly legal docs ---------- */
+@media print {
+  header.site, footer.site, .btn, .store-row { display: none; }
+  body { background: #fff; color: #000; }
+  a { color: #000; text-decoration: underline; }
+}

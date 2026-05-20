@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Universal links / App links manifests are public by design.
+Allow: /.well-known/
+
+Sitemap: https://turnaphrase.app/sitemap-index.xml
