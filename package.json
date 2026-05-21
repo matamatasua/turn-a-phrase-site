@@ -10,12 +10,14 @@
     "build": "astro build",
     "preview": "astro preview",
     "deploy": "astro build && wrangler pages deploy dist --project-name=turn-a-phrase",
+    "og": "node scripts/generate-og.mjs",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^5.0.0"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "wrangler": "^3.90.0"
   }
 }
