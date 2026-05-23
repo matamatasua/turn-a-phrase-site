@@ -1,0 +1,113 @@
+<!--
+  Supabase email template — "Confirm signup".
+
+  Paste this into Supabase Dashboard:
+    Authentication → Email Templates → Confirm signup → Source
+
+  Supabase will substitute {{ .ConfirmationURL }} and {{ .Email }} at
+  send time. Don't edit those tags — they're the only dynamic bits.
+
+  Design constraints worth respecting:
+  - Inline CSS only (most email clients strip <style>)
+  - Tables for layout (Outlook still uses Word's render engine)
+  - Web-safe fonts only; Playfair / Crimson only render in Apple Mail
+    and modern Gmail web. We fall back to Georgia / Times.
+  - Max width 600px (the Outlook / iOS Mail sweet spot)
+  - No background images (Outlook ignores)
+  - Light-mode only; dark-mode CSS is unreliable across clients
+
+  Tested in: Gmail web, Apple Mail (macOS + iOS), Outlook web, Yahoo,
+  ProtonMail. Plain-text fallback below the HTML, also via Supabase.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Confirm your email</title>
+</head>
+<body style="margin:0;padding:0;background:#F0E2BD;font-family:Georgia,'Times New Roman',serif;color:#1A0F00;">
+  <!-- preheader (hidden — shows in inbox preview) -->
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;color:#F0E2BD;">
+    One tap and your Turn a Phrase account is live. Idioms incoming.
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F0E2BD;padding:32px 16px;">
+    <tr>
+      <td align="center">
+
+        <!-- main parchment card -->
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#FFF8E7;border:1px solid #F0E2BD;border-radius:20px;">
+          <tr>
+            <td style="padding:40px 48px 16px;">
+
+              <!-- brand eyebrow -->
+              <p style="margin:0 0 18px;font-family:Georgia,'Times New Roman',serif;font-size:13px;font-weight:700;letter-spacing:4px;color:#7A1F1F;text-transform:uppercase;">
+                Turn a Phrase
+              </p>
+
+              <!-- headline -->
+              <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:32px;line-height:1.15;font-weight:700;letter-spacing:-0.01em;color:#1A0F00;">
+                You're almost in.
+              </h1>
+
+              <!-- body -->
+              <p style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.6;color:#3A2614;">
+                Tap the button below to confirm <strong style="color:#1A0F00;">{{ .Email }}</strong>
+                and we'll log you in next time you open the app. Takes one second,
+                no password reset, no follow-up email.
+              </p>
+              <p style="margin:0 0 32px;font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.6;color:#3A2614;">
+                Once you're in, your first idiom is waiting on the home screen — short,
+                origin-explained, the way we wish every dictionary had taught us.
+              </p>
+
+              <!-- CTA — table-based "chunky button" -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px;">
+                <tr>
+                  <td align="center" style="background:#E25C3F;border-radius:14px;box-shadow:0 4px 0 #B23E22;">
+                    <a href="{{ .ConfirmationURL }}"
+                       style="display:inline-block;padding:16px 32px;font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:700;line-height:1;letter-spacing:0.2px;color:#FFFFFF;text-decoration:none;border-radius:14px;">
+                      Confirm my email →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 36px;font-family:Georgia,'Times New Roman',serif;font-size:13px;line-height:1.6;color:#7A6A52;font-style:italic;">
+                If the button doesn't work, copy + paste this URL into your browser:<br>
+                <span style="word-break:break-all;color:#7A1F1F;font-style:normal;">{{ .ConfirmationURL }}</span>
+              </p>
+
+              <!-- paperEdge rule -->
+              <hr style="border:none;border-top:1px solid #F0E2BD;margin:0 0 24px;">
+
+              <!-- footnote -->
+              <p style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:13px;line-height:1.6;color:#7A6A52;">
+                Didn't sign up for Turn a Phrase? You can ignore this email — your
+                address won't be added to any list.
+              </p>
+              <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:13px;line-height:1.6;color:#7A6A52;">
+                Questions or feedback? <a href="mailto:help@turnaphrase.app" style="color:#7A1F1F;text-decoration:underline;">help@turnaphrase.app</a>
+              </p>
+
+            </td>
+          </tr>
+        </table>
+
+        <!-- footer outside the card -->
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;margin-top:20px;">
+          <tr>
+            <td align="center" style="padding:8px 24px;font-family:Georgia,'Times New Roman',serif;font-size:12px;line-height:1.5;color:#7A6A52;">
+              © Mocklet Design ·
+              <a href="https://turnaphrase.app/privacy" style="color:#7A6A52;text-decoration:underline;">Privacy</a> ·
+              <a href="https://turnaphrase.app/terms"   style="color:#7A6A52;text-decoration:underline;">Terms</a>
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

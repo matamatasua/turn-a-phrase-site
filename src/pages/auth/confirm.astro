@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+/**
+ * Email confirmation landing page.
+ *
+ * Supabase sends users a link of the shape:
+ *   https://turnaphrase.app/auth/confirm?token_hash=XXX&type=signup
+ *
+ * This page calls supabase.auth.verifyOtp with those params, then shows
+ * a success / error state. The server-side render is just the parchment
+ * shell + loading state; the actual verification happens client-side.
+ *
+ * Why client-side: we'd need the Supabase admin key to verify
+ * server-side, and we don't want that on a static site. The anon key
+ * works fine for verifyOtp because the token_hash itself is the
+ * capability — it's single-use and tied to one email/user.
+ */
+
+const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  throw new Error('PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY must be set in .env at build time.');
+}
+---
+<BaseLayout
+  title="Confirming your email — Turn a Phrase"
+  description="Just a second while we confirm your email."
+  path="auth/confirm"
+>
+  <div class="container legal" id="confirm-root">
+    <span class="eyebrow">Email confirmation</span>
+
+    <div id="state-loading">
+      <h1>Just a second…</h1>
+      <p class="lede">Confirming your email so we can sign you in.</p>
+      <div class="spinner" aria-hidden="true"></div>
+    </div>
+
+    <div id="state-success" hidden>
+      <h1>You're in. ✓</h1>
+      <p class="lede">Your email is confirmed. Open the Turn a Phrase app on your phone and sign in with the email and password you just used.</p>
+      <p>
+        Your streak starts tomorrow morning when you tap the first daily challenge. We'll
+        also send you a quiet reminder every evening at 7 PM unless you turn that off in
+        settings.
+      </p>
+      <p style="margin-top:32px;color:var(--ink-muted);font-size:0.95rem;">
+        Don't have the app installed? Pop back to the device you signed up on and the
+        sign-in link is still on screen.
+      </p>
+    </div>
+
+    <div id="state-error" hidden>
+      <h1>That didn't work.</h1>
+      <p class="lede" id="error-detail">The confirmation link may have expired or already been used.</p>
+      <p>
+        Easiest fix: go back to the Turn a Phrase app, sign in with the same email and password,
+        and tap "Resend confirmation" if it prompts you. If that still fails after a couple of
+        tries, send the error message to <a href="mailto:help@turnaphrase.app?subject=Email%20confirmation%20stuck">help@turnaphrase.app</a> and we'll fix it within a day.
+      </p>
+    </div>
+  </div>
+
+  <style>
+    .spinner {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 3px solid var(--paper-edge);
+      border-top-color: var(--coral);
+      animation: spin 0.8s linear infinite;
+      margin: 28px 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #error-detail { color: var(--wax); font-style: italic; }
+  </style>
+
+  {/* Astro compiles this script + bundles @supabase/supabase-js
+      via Vite. PUBLIC_* env vars are passed in via define:vars so
+      they're available as globals inside the script body. */}
+  <script define:vars={{ SUPABASE_URL, SUPABASE_ANON_KEY }}>
+    import('https://esm.sh/@supabase/supabase-js@2').then(({ createClient }) => {
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      const tokenHash = params.get('token_hash') || params.get('token');
+      const type = params.get('type') || 'signup';
+
+      const $loading = document.getElementById('state-loading');
+      const $success = document.getElementById('state-success');
+      const $error   = document.getElementById('state-error');
+      const $errDetail = document.getElementById('error-detail');
+
+      function show(el) {
+        $loading.hidden = true;
+        $success.hidden = true;
+        $error.hidden = true;
+        el.hidden = false;
+      }
+
+      async function verify() {
+        if (!tokenHash) {
+          $errDetail.textContent = "We couldn't find the confirmation code in this link. Try opening the email again and tapping the button directly instead of copy-pasting the URL.";
+          show($error);
+          return;
+        }
+        try {
+          const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
+          if (error) {
+            $errDetail.textContent = error.message;
+            show($error);
+            return;
+          }
+          show($success);
+        } catch (err) {
+          $errDetail.textContent = err && err.message ? err.message : "Unknown error.";
+          show($error);
+        }
+      }
+
+      verify();
+    });
+  </script>
+</BaseLayout>
